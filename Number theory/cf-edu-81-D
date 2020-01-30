@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+ll phi(ll x){
+	ll res=x;
+	ll a=x;
+	for(ll i=2; i*i<=a; ++i){
+		if(a%i==0){
+			res = res/i*(i-1);
+			while(a%i==0)a/=i;
+		}
+	}
+	if(a>1)res=res/a*(a-1);
+	return res;
+}
+int main()
+{
+	int t;
+	cin>>t;
+	while(t--){
+		ll a, m;
+		cin>> a>> m;
+		ll d = __gcd(a, m);
+		a/=d;m/=d;
+		cout<<phi(m)<<"\n";
+	}
+} 
+/*
+phi(i) means the number x that is less than i and GCD(i, x)==1
+Now we wonder gcd(a+x, m)==gcd(a, m)=d
+It means that number x that gcd(a/d, m/d)==1, d=gcd(a, m)
+the answer is phi(m/d)
+
+*/
