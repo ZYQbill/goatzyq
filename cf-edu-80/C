@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+const int mo = 1e9 + 7;
+const int maxn = 1e3 + 10;
+LL dp[30][maxn], sum[maxn];
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    m *= 2;
+    for (int i = 1; i <= n; i++)
+        dp[1][i] = 1;
+    for (int i = 2; i <= m; i++) {
+        sum[1] = dp[i][1] = 1;
+        for (int j = 2; j <= n; j++) {
+            dp[i][j] = dp[i][j-1] + dp[i-1][j];
+            /*sum[j] %= mo;
+            dp[i][j] += sum[j];*/
+            dp[i][j] %= mo;
+        }
+    }
+    LL ans = 0;
+    for (int i = 1; i <= n; i++) {
+        ans += dp[m][i];
+        ans %= mo;
+    }
+    cout << ans;
+}
+/*
+dp[i][j] is the number of cases that the ith number is j.
+dp[i][j]=dp[i][j-1]+dp[i-1][j]
+for the i-1th number, there are only two cases
+case1: the i-1 number is j-1 we have calculate dp[i][j-1]
+case2: the ith number is j then we have dp[i-1][j]
+initially, dp[1][i]=1, dp[i][1]=1
+then for i: 2 to m
+		for j: 2:n
+			we have the fomula dp[i][j] = dp[i][j-1] + dp[i-1][j];
+*/ 
+
+another method
+the answer is C(2*m-1, n+2*m-1)
