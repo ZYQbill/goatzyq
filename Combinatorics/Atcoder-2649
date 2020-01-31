@@ -1,9 +1,3 @@
-#include<bits/stdc++.h>
-#define debug(x) cout << #x << "\t" << x << endl
-using namespace std;
-using ll = long long;
-const int maxn = 1e5+7;
-const int mod = 1e9+7;
 
 /*
 if we choose k numbers from n+1 numbers,
@@ -17,8 +11,15 @@ the position of them are p1, p2
 the number of this case is C(n-p2+p1, k-1)
 Above all, the answer is C(n+1, k)-C(n-p2+p1, k-1)
 
-the inv of the fac can be solved with the method int the init()
+ps:the inv of the fac can be solved with the method int the init()
 */
+#include<bits/stdc++.h>
+#define debug(x) cout << #x << "\t" << x << endl
+using namespace std;
+using ll = long long;
+const int maxn = 1e5+7;
+const int mod = 1e9+7;
+
 int n;
 int a[maxn]={0};
 ll fac[maxn];
