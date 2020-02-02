@@ -1,0 +1,65 @@
+最左到哪最右到哪经典套路
+用权值树状数组维护
+
+#include<bits/stdc++.h>
+#ifndef ONLINE_JUDGE
+#define debug(x) cout << #x <<"\t" <<x <<endl
+#else
+#define debug(x)
+#endif
+using namespace std;
+using ll = long long;
+const int maxn = 3e5+7;
+int n, m;
+int a[maxn];
+int bit[maxn*2];
+
+int lowbit(int x)
+{
+	return x & -x;
+}
+void update(int x, int a)
+{
+	while(x<=maxn*2){
+		bit[x] += a;
+		x += lowbit(x);		
+	}
+}
+int query(int x)
+{
+	int ret = 0;
+	while(x>0){
+		ret+=bit[x];
+		x -= lowbit(x); 
+	}
+	return ret;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cin >> n >> m;
+	vector<int>mx(n+5), mn(n+5);
+	iota(mn.begin(), mn.end(), 0);
+	mx=mn;
+	for(int i=1; i<=m; ++i){
+		cin >> a[i];
+		mn[a[i]]=1;
+	}
+	vector<int>pos(n);
+	for(int i=1; i<=n; ++i)pos[i]=n-i+1; 
+	for(int i=1; i<=n; ++i)update(i, 1);
+	for(int i=1; i<=m; ++i){
+		mx[a[i]]=max(mx[a[i]], query(n+i)-query(pos[a[i]]-1));
+		update(pos[a[i]], -1);
+		pos[a[i]]=i+n;
+		update(pos[a[i]], 1);
+	}
+	for(int i=1; i<=n; ++i){
+		mx[i] = max(mx[i], query(n+m)-query(pos[i]-1));
+	}
+	for(int i=1; i<=n; ++i){
+		cout << mn[i] <<" "<<mx[i]<<"\n";
+	}
+} 
