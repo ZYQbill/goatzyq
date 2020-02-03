@@ -47,16 +47,16 @@ int main()
 			else sz[find(a1+k)]+=inf;
 			ans += min(sz[find(a1)], sz[find(a1+k)]);
 		}
-		else{
-			int u=st[i][0], v=st[i][1];
+		else{//由于dsu 所以必须-= or += 来维护个数
+			int u=st[i][0], v=st[i][1];//u是集合选，u+k是集合不选
 			ans -= min(sz[find(u)], sz[find(u+k)]);
-			if(find(v)!=find(u)&&find(u)!=find(v+k)){
+			if(find(v)!=find(u)&&find(u)!=find(v+k)){//u和v不通且u和v+k不通，我们需要减去其中最小的，因为不需要再选他们
 				ans-=min(sz[find(v)],sz[find(v+k)]);
 			}
-			if(s[i]=='0'){
+			if(s[i]=='0'){//一个选，一个不选
 				Union(u+k, v);
 				Union(u, v+k);
-			}else{
+			}else{//两个都要选
 				Union(u, v);
 				Union(u+k, v+k);
 			}
