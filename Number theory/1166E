@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+/*
+due to the lcm
+if there exists a situation that Di contains Sj that is Si contains Dj
+then LCMai>LCMbi>=LCMaj>LCMbj>=LCMai
+impossible
+
+so only when a[i]&a[j]!=0
+possible
+using namespace std;
+const int maxn = 1e4+7;
+bitset<maxn>a[60];
+int n, m;
+int main() 
+
+	cin >> m >> n;
+	for(int i=0, tmp; i<m; ++i){
+		cin >> tmp;
+		for(int j=0, t; j<tmp; ++j){
+			cin >> t;
+			a[i].set(t);
+		}
+	}
+	for(int i=0; i<m; ++i){
+		for(int j=0; j<i; ++j){
+			bitset<maxn>cur=a[i]&a[j];
+			if(!cur.any()){
+				cout << "impossible\n";
+				return 0;
+			}
+		}
+	}
+	cout <<"possible\n";
+}
