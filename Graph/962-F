@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+/*
+给出一个无向图，求出所有只在一个简单环上出现过的边。简单环：环上每两个点都不同。
+思路很清晰，就是找到简单环，那么我们可以先找环，然后判断他是不是简单的。
+而点双连通分量的定义就是，每一个连通分量中的两点之间，都存在两条点不重复路径，他等价于任意两条边都存在于一个简单环中，
+那么这个东西不就是我们要的环吗？然后思考如何判断他是简单的，很显然，点数=边数。注意好多单链要特判扔掉。
+
+*/
+using namespace std;
+const int maxn = 1e5+7;
+struct node{
+	int v, next;
+};
+int head[maxn];
+node edge[maxn<<1];
+int st[maxn<<1], top;
+int cnt;
+int cnt_n[maxn], cnt_e[maxn], bcc_no[maxn], bcc_cnt;
+int dfn[maxn], low[maxn], tag;
+inline void init(){
+	memset(head, -1, sizeof(head));
+	cnt=0;
+}
+inline void addedge(int u, int v){
+	edge[cnt].v=v;
+	edge[cnt].next=head[u];
+	head[u]=cnt++;
+}
+vector<int>tmp, ans;
+void dfs(int u, int fa, int id){
+	dfn[u] = low[u] = ++tag;
+	for(int i=head[u]; ~i; i=edge[i].next){
+		int v = edge[i].v;
+		if(v==fa)continue;
+		if(!dfn[v]){
+			st[top++]=i;
+			dfs(v, u, i);
+			low[u] = min(low[u], low[v]);
+			if(low[v]==dfn[u]){
+				bool ok=1;
+				bcc_cnt++;
+				tmp.clear();
+				while(true){
+					int now = st[--top];
+					tmp.push_back(now/2+1);//建的是双向边 
+					if(bcc_no[edge[now].v]!=bcc_cnt){
+						bcc_no[edge[now].v] = bcc_cnt;
+					}else{
+						ok=0;//这个点已经在这个环出现过了，所以不可以了 
+					}
+					if(now==i)break;
+				}
+				if(ok){
+					for(auto a:tmp){
+						ans.push_back(a);
+					}
+				}
+			}
+		}else if(dfn[v]<dfn[u]){
+			st[top++] = i;
+			low[u] = min(low[u], dfn[v]);
+		}
+	}
+	if(st[top-1]==id)top--;//特判单链，没有必要出现 
+}
+
+
+
+int main()
+{
+	
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	init();
+	int n, m;
+	cin >> n >> m;
+	for(int i=0, u, v; i<m; ++i){
+		cin >> u >> v;
+		addedge(u, v);
+		addedge(v, u);
+	}
+	for(int i=1; i<=n; ++i){
+		if(!dfn[i])dfs(i, -1, -1);
+	}
+	sort(ans.begin(), ans.end());
+	cout << ans.size()<<"\n";
+	for(auto v : ans){
+		cout << v <<" ";
+	}
+} 
