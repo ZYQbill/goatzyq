@@ -1,0 +1,48 @@
+/*
+Let Si be the sum of a1+a2+...+ai. Now we see that:
+if we move a chocolate piece from box i to box i+1, it is equivalent to decrease Si by 1.
+if we move a chocolate piece from box i+1 to box i, it is equivalent to increase Si by 1.
+We only need to consider the prime k, if there is an p divisible, we can take it all from the sum.
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int maxn = 1e6+7;
+int a[maxn];
+ll s[maxn];
+int n;
+ll cost(ll mod){
+	ll ret=0;
+	for(int i=1; i<=n; ++i){
+		ret += min(s[i]%mod, mod-s[i]%mod);
+	}
+	return ret;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cin >> n;
+	for(int i=1; i<=n; ++i){
+		cin >> a[i];
+		s[i] = s[i-1] + a[i];
+	} 
+	if(s[n]==1){
+		cout <<"-1\n";
+		return 0;
+	}
+	ll ans = 1e18;
+	ll tmp = s[n], p=2;
+	while(p*p<=tmp){
+		if(tmp%p==0){
+			ans = min(ans, cost(p));
+			while(tmp%p==0)tmp/=p;
+		}
+		++p;
+	}
+	if(tmp>1)ans = min(ans, cost(tmp));
+	cout << ans <<"\n";
+	
+} 
