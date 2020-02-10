@@ -1,0 +1,56 @@
+一个 n 个点无向连通完全图，边权只有 0 和 1。问最小权值生成树。 指定 m 条边的权值为 1，剩下边的权值都为 0。
+答案为补图连通块数-1
+用双向链表做bfs删除操作维护连通块的个数
+#include<bits/stdc++.h>
+
+using namespace std;
+const int maxn = 1e5+7;
+vector<int> G[maxn];
+
+int n, m;
+bool vis[maxn];
+bool used[maxn];
+pair<int, int> a[maxn];
+inline void del(int u){
+	a[a[u].first].second = a[u].second;
+	a[a[u].second].first = a[u].first;
+}
+void bfs(int s){
+	used[s] = 1;
+	queue<int>que;
+	que.push(s);
+	while(!que.empty()){
+		auto u = que.front();
+		que.pop();
+		for(auto &v:G[u]) vis[v]=1;
+		for(int v = a[0].second; v; v = a[v].second){
+			if(!vis[v]&&!used[v])que.push(v), del(v), used[v]=1;//u->v 都是连通的 
+		}
+		for(auto v:G[u])vis[v] = 0;
+	}
+}
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cin >> n >> m;
+	for(int i=0, u, v; i<m; ++i){
+		cin >> u >> v;
+		G[u].push_back(v);
+		G[v].push_back(u);
+	}
+	int cnt = 0;
+	for(int i=1; i<=n; ++i){
+		a[i].first = i-1;
+		a[i].second = i+1;
+	}
+	a[0].second = 1;
+	a[n].second = 0;
+	for(int i=1; i<=n; ++i){
+		if(!used[i]){
+			bfs(i);
+			cnt++;
+		}
+	}
+	cout << cnt-1;
+} 
