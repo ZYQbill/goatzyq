@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+const int N = 410;
+int dp[N][N];
+int nxt[N][N];
+char s[N], t[N];
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	int T;
+	cin >> T;
+	while(T--){
+		memset(dp, 0, sizeof(dp));
+		cin >> s+1;
+		cin >> t+1;
+		int n=strlen(s+1);
+		int m = strlen(t+1);
+		for(int i=0; i<26; ++i)nxt[n][i]=n+1;
+		for(int i=n-1; ~i; --i){
+			for(int j=0; j<26; ++j)nxt[i][j]=nxt[i+1][j];
+			nxt[i][s[i+1]-'a']=i+1; 
+		}
+		bool flag=0;
+		for(int st=1; st<=m; ++st){
+			for(int i=0; i<=m; ++i)for(int j=0; j<=m; ++j)dp[i][j]=n+1;
+			dp[0][st-1]=0;
+			for(int i=0; i<st; ++i){
+				for(int j=st-1; j<=m; ++j){
+					if(dp[i][j]==n+1)continue;
+					if(i!=st-1)dp[i+1][j] = min(dp[i+1][j], nxt[dp[i][j]][t[i+1]-'a']);
+					if(j!=m)dp[i][j+1] = min(dp[i][j+1], nxt[dp[i][j]][t[j+1]-'a']);
+				}
+			}
+			if(dp[st-1][m]<=n){
+				flag=1;break;
+			}
+		}
+		puts(flag?"YES":"NO");
+	}	
+}
+/*
+dp[i][j] 表示 a里边有前i个， b里边有j个，最少s的前缀的花费
+so if we move from dp[i][j] to dp[i+1][j] or from dp[i][j] to dp[i][j+1]
+dp[i+1][j] = min(nxt[dp[i][j]][t[i+1]-'a');
+dp[i][j+1] = min(nxt[dp[i][j]][t[j+1]-'a');
+we need to iterate st from 1 to m
+witch means  the first st was selected from a
+and the last was from string b
+*/
