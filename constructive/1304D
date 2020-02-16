@@ -1,0 +1,52 @@
+/*
+利用最多的<
+以及利用最少的<
+
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+using ll =  long long;
+using pii = pair<int,int>;
+using vi = vector<int>;
+#define all(x) x.begin(), x.end() 
+const int inf=0x3f3f3f3f;
+#define mp(x) make_pair(x)
+#define pb(x) push_back(x)
+const int maxn = 2e5+7;
+int ma[maxn], p[maxn];
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	int t;
+	cin >> t;
+	string s;
+	while(t--){
+		int n;
+		cin >> n;
+		cin >> s;
+		vector<int>a(n), b(n);
+		for(int i=0; i<n; ++i){
+			a[i]=n-i;
+			b[i]=i+1;
+		}
+		for(int i=0; i<n; ){
+			int j = i;
+			while(s[j]=='<')j++;
+			reverse(a.begin()+i, a.begin()+j+1);
+			i = j+1;
+		}
+		for(int i=0; i<n; ){
+			int j = i;
+			while(s[j]=='>')j++;
+			reverse(b.begin()+i, b.begin()+j+1);
+			i = j+1;
+		}
+		for(auto u:a){
+			cout << u <<" ";
+		}cout <<"\n";
+		for(auto u:b)cout << u <<" ";
+		cout <<"\n";
+	}
+} 
