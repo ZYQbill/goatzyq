@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+const int maxn = 3e5+7;
+ll fac[maxn];
+int main()
+{
+	int n, mod;
+	scanf("%d%d", &n, &mod);
+	fac[0] = 1;
+	for(int i=1; i<=n; ++i){
+		fac[i]=i*fac[i-1]%mod;
+	}
+	ll ans = 0;
+	for(int i=1; i<=n; ++i){
+		ans += 1ll*(n-i+1)*fac[i]%mod*fac[n-i+1]%mod;
+		ans %= mod;
+	}
+	
+	printf("%lld", ans);
+}
+
+// for the number of the ways, we can try the regulation of it.
